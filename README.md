@@ -17,8 +17,12 @@ For this project, you will write a Packer template and a Terraform template to d
 4. Install [Terraform](https://www.terraform.io/downloads.html)
 
 ### Instructions
-**Your words here**
+
+- Run `packer build`  on your Packer template with any appropriate variable arguments
+- Run `terraform plan -out solution.plan`
+- Deploy your Terraform infrastructure – don't forget to `terraform destroy` when done
 
 ### Output
-**Your words here**
+
+We used Packer to create a server image, and Terraform to create a template for deploying a scalable cluster of servers—with a load balancer to manage the incoming traffic. We’ll also needed to adhere to security practices and ensure that our infrastructure is secure.
 

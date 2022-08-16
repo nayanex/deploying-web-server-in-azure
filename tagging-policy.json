@@ -1,0 +1,18 @@
+{
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "name": "tagging-policy",
+    "properties": {
+        "mode": "indexed",
+        "displayName": "Ensures indexed resources in the subscription have tags",
+        "description": "Ensures all indexed resources in the subscription have tags and deny deployment if they do not.",
+        "policyRule": {
+            "if": {
+                "value": "[less(length(field('tags')), 1)]",
+                "equals": "true"
+            },
+            "then": {
+                "effect": "deny"
+            }
+        }
+    }
+}

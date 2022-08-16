@@ -26,3 +26,8 @@ For this project, you will write a Packer template and a Terraform template to d
 
 We used Packer to create a server image, and Terraform to create a template for deploying a scalable cluster of servers—with a load balancer to manage the incoming traffic. We’ll also needed to adhere to security practices and ensure that our infrastructure is secure.
 
+```bash
+az policy definition create --name LinuxPasswordPolicy --rules azurepolicy.rules.json --description "Ensures all indexed resources in the subscription have tags and deny deployment if they do not."  --display-name "Ensures indexed resources in the subscription have tags"
+az policy assignment create --policy LinuxPasswordPolicy
+az policy assignment list
+```

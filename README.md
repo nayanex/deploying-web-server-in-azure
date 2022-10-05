@@ -49,5 +49,36 @@ az policy assignment create -h
 
 CONCLUSION: We created our policy locally, deployed it and applied it using the command line.
 
-## NETWORK SECURITY GROUPS
+
+## VIRTUAL NETWORKING
+
+The Azure documentation on [virtual networks](https://docs.microsoft.com/azure/virtual-network/manage-virtual-network?WT.mc_id=udacity_learn-wwl) is helpful, and also contains information on DNS, VNet peering, and more advanced virtual networking concepts.
+
+Once we have a virtual network, we can create a subnets within it to separate resources. Subnetting is important both to reduce congestion and for security purposes
+
+* We can have as many subnets as we have IP addresses, since two subnets can not contain the same IP address.
+
+* Subnets contain VMs and Virtual Network Interface cards (NICs).
+
+* Subnets and networks are separate from VMs, they can persist after a VM is gone.
+
+### Network Interface Cards
+
+* They're assigned a private IP address on the subnet correspondingly. Whatever virtual machine they are attached to resolves to that IP address.
+
+* Must be in the same region as the VM is attached to.
+
+### Public IP Address
+
+* Allows access to a subnet from the internet - this can be scary. Without security, we have no way of restricting access from bad actors. Make sure you configure Security Groups.
+
+* IP address assignment can be dynamic or static.A dynamic IP address gives us a public IP when the VM is started and is less expensive than a static IP address. you would want to use a static IP address when you want to map a certificate to an IP address or when we have a custom domain name for our IP
+
+### NETWORK SECURITY GROUPS
+
+* Rules to define what traffic can flow in and out of VMs.
+
+* Associated to virtual network subnets
+
+
 

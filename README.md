@@ -77,12 +77,6 @@ Once we have a virtual network, we can create a subnets within it to separate re
 
 * IP address assignment can be dynamic or static.A dynamic IP address gives us a public IP when the VM is started and is less expensive than a static IP address. you would want to use a static IP address when you want to map a certificate to an IP address or when we have a custom domain name for our IP
 
-### NETWORK SECURITY GROUPS
-
-* Rules to define what traffic can flow in and out of VMs.
-
-* Associated to virtual network subnets
-
 ## CIDR ip address subnet
 
 https://www.freecodecamp.org/news/subnet-cheat-sheet-24-subnet-mask-30-26-27-29-and-other-ip-address-cidr-network-references/#:~:text=CIDR%20notation%20is%20really%20just,the%20subnet%20mask%20255.255.255.0%20.
@@ -110,9 +104,9 @@ Directories can have groups, which can be in other groups, each of which has num
 
 In Azure, an administrator has more privileges than a contributor, who has more permissions than a reader. Assume that your user is assigned the reader role. Your user is also in a subgroup of a group which is assigned the contributor role. What is the effective role assigned to your user?
 
-- [] Administrator
+- [ ] Administrator
 - [x] Contributor
-- [] Reader
+- [ ] Reader
 
 ## AZURE ACTIVE DIRECTORY
 
@@ -135,24 +129,24 @@ We'll use the above to tell Azure what the application is and we can use it in c
 
 Now that you've seen Azure Active Directory, using the Azure Portal, you should go ahead and create a Service Principal for yourself, to use in future lessons.
 
-- [] Navigate to Azure Active Directory in the Azure Portal
-- [] Navigate to "App Registrations"
-- [] Click "New Registration"
-- [] Create a single tenant service principal with no redirect URI named "Terraform"
-- [] Navigate to the "Subscriptions" service
-- [] In your primary subscription, navigate to "Access control (IAM)"
-- [] Click Add > Add role assignment
-- [] Give the "Contributor" role to your "Terraform" application
-- [] Click Save
+- [ ] Navigate to Azure Active Directory in the Azure Portal
+- [ ] Navigate to "App Registrations"
+- [ ] Click "New Registration"
+- [ ] Create a single tenant service principal with no redirect URI named "Terraform"
+- [ ] Navigate to the "Subscriptions" service
+- [ ] In your primary subscription, navigate to "Access control (IAM)"
+- [ ] Click Add > Add role assignment
+- [ ] Give the "Contributor" role to your "Terraform" application
+- [ ] Click Save
 
 ### QUIZ
 
 We created a single tenant application. When would you want to create a multi-tenant application?
 
-- [] In a single company with many stores
-- [] In an organization with a small IT department
+- [ ] In a single company with many stores
+- [ ] In an organization with a small IT department
 - [X] When we have an application we want to authenticate to from another tenant
-- [] When creating an application with a lot of users.
+- [ ] When creating an application with a lot of users.
 
 
 ```bash
@@ -162,6 +156,7 @@ az vm list
 az vm list -o table
 az vm list -h
 az vm create -h
+az vm show -name udacity-cli-vm -resource-group udacity-cli-rg
 
 ## create resource group
 az group create --name udacity-cli-rg --location eastus
@@ -176,5 +171,37 @@ The command to create a virtual machine above will let us see the IP address tha
 ssh 52.152.216.174
 ```
 
-While logged into the virtual machine you can ude the `iconfig` command to see the IP address
+While logged into the virtual machine you can ude the `iconfig` command to see the IP address and you can see that we have an internal IP address of 10.0.0.4, which is the first virtual IP address that can be assigned.
 
+### NETWORK SECURITY GROUPS
+
+* Rules to define what traffic can flow in and out of VMs.
+
+* Associated to virtual network subnets
+
+The default NSG allow internal traffic from the virtual network and any inbound traffic from a load balancer on the subnet and denies all other inbound traffic.
+
+When you create NSGs, there are numerous customizations you can make, as follows, that allow you to really control your traffic in both directions.:
+
+* Name
+* Priority
+* Source or Destination
+* Protocol
+* Direction
+* Port Range
+* Allow or Deny Action
+
+
+Look at the default rules again. What services, if any, are now allowed or disallowed given the new "Allow RDP rule"?
+
+![network-security-group-configuration](img/network-security-group-configuration.png)
+
+The rule you added is lower priority, so it could explicitly allow RDP if a rule were put in place which might deny it, but nothing about the effective configuration changed.
+
+Think about NSG rule evaluation order. Lower-numbers are evaluated first and evaluation stops as soon as a rule evaluates to true.
+
+![allowRDP-NSG-inbound-rule](img/allowRDP-NSG-inbound-rule.png)
+
+![deny-ssh-nsg-inbound-rule](img/deny-ssh-nsg-inbound-rule.png)
+
+![Inbound-security-rules](img/Inbound-security rules.png)

@@ -204,4 +204,40 @@ Think about NSG rule evaluation order. Lower-numbers are evaluated first and eva
 
 ![deny-ssh-nsg-inbound-rule](img/deny-ssh-nsg-inbound-rule.png)
 
-![Inbound-security-rules](img/Inbound-security rules.png)
+![Inbound-security-rules](img/Inbound-security-rules.png)
+
+
+## Azure Security Best Practices
+
+[Best Practices](https://docs.microsoft.com/azure/security/fundamentals/best-practices-and-patterns?WT.mc_id=udacity_learn-wwl)
+
+### Treat Identity as the Perimeter
+
+Using identity as your perimeter is a critical concept in cloud security. We should:
+
+* Centralize identity management in Active Directory and implement [AD sync](https://docs.microsoft.com/azure/active-directory/hybrid/how-to-connect-sync-whatis?WT.mc_id=udacity_learn-wwl) if possible.
+* Use s[ingle sign-on](https://docs.microsoft.com/azure/active-directory/manage-apps/what-is-application-management?WT.mc_id=udacity_learn-wwl) for apps that we manage to allow Azure AD to control access.
+
+### Network Security
+
+* Use strong network controls
+* Segment subnets logically
+* Have big virtual networks with small subnets
+* Don't assign NSG rules with broad ranges
+* Use [Just-in-Time VM](https://docs.microsoft.com/azure/security-center/just-in-time-explained?WT.mc_id=udacity_learn-wwl) access if possible
+
+### Microsoft Learn
+
+
+* [Configure and manage secrets in Azure Key Vault](https://docs.microsoft.com/learn/modules/configure-and-manage-azure-key-vault/?WT.mc_id=udacity_learn-wwl)
+* [Monitor and report on security events in Azure AD](https://docs.microsoft.com/learn/modules/monitor-report-aad-security-events/?WT.mc_id=udacity_learn-wwl)
+* [Improve your reliability with modern operations practices: Learning from failure](https://docs.microsoft.com/learn/modules/improve-reliability-failure/?WT.mc_id=udacity_learn-wwl)
+
+## INFRASTRUCTURE AS CODE
+
+**Infrastructure as code** gives us a huge advantage in defining, deploying, updating, and destroying our infrastructure. Some key benefits are:
+
+* Instead of having to request development environments and wait for tickets to be fulfilled, we can use _self-service_ to allow users to deploy their own environments.
+* Version control
+* Increased documentation
+* Automated testing and validation.

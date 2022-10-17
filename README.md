@@ -241,3 +241,24 @@ Using identity as your perimeter is a critical concept in cloud security. We sho
 * Version control
 * Increased documentation
 * Automated testing and validation.
+
+## Terraform
+
+[Terraform documentation for Azure](https://www.terraform.io/docs/providers/azurerm/index.html)
+
+### Deploying Resources with Terraform
+
+Here, we create a Terraform configuration. To deploy our configuration, we run the following commands:
+
+`terraform plan -out <filename>`
+
+`terraform apply`
+
+`terraform show` =>  to see your new infrastructure!
+
+`terraform destroy` => to take down your infrastructure
+
+`terraform show` => To verify that everything has been destroyed.
+
+[azurerm_public_ip Documentation](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/public_ip)
+

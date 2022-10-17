@@ -38,8 +38,8 @@ resource "azurerm_linux_virtual_machine" "main" {
   resource_group_name             = azurerm_resource_group.main.name
   location                        = azurerm_resource_group.main.location
   size                            = "Standard_D2s_v3"
-  admin_username                  = "${var.username}"
-  admin_password                  = "${var.password}"
+  admin_username                  = var.username
+  admin_password                  = var.password
   disable_password_authentication = false
   network_interface_ids = [
     azurerm_network_interface.main.id,
@@ -57,3 +57,14 @@ resource "azurerm_linux_virtual_machine" "main" {
     caching              = "ReadWrite"
   }
 }
+
+# resource "azurerm_public_ip" "example" {
+#   name                = "acceptanceTestPublicIp1"
+#   resource_group_name = azurerm_resource_group.example.name
+#   location            = azurerm_resource_group.example.location
+#   allocation_method   = "Static"
+
+#   tags = {
+#     environment = "Production"
+#   }
+# }

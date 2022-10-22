@@ -262,3 +262,36 @@ Here, we create a Terraform configuration. To deploy our configuration, we run t
 
 [azurerm_public_ip Documentation](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/public_ip)
 
+## Packer
+
+```bash
+packer build demo.json
+
+# display all of our virtual machine images
+az image list 
+
+# Remember, Packer does not maintain state, so you can't actually delete your Packer image using Packer
+# So, for that you'll need to use Azure CLI command:
+az image delete -g packer-rg -n myPackerImage
+
+az image list
+```
+
+## AAD Service Principal Information
+
+
+![AAD-service-principal-overview](img/AAD-service-principal-overview.png)
+
+
+Fields |	Credentials	 | FROM
+-------|-----------------|---------------
+Application (Client) Id |	ee931dc3-e1ed-401f-b886-a8d83125124e | Application
+Display Name	| terraform	|
+Secret Key |	Ua38Q~hYCZz.IOYdLEgwU0~8CGfpYsi5Vo3_LaAj	| Value in Certificates and secrets (Application)
+Subscription Id	| bb272072-9c6d-4e28-b814-947814c3e6ef	|
+Tenant Id	| d6ce14d5-a0a4-4d36-b8b3-65222befc0b6	|
+Tenant Domain Name	| api://ee931dc3-e1ed-401f-b886-a8d83125124e	| From Application ID URI (base URL)
+
+
+![AAD-service-principal-expose-API](img/AAD-service-principal-expose-API.png)
+

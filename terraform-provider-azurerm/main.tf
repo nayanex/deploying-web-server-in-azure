@@ -1,5 +1,13 @@
 provider "azurerm" {
   features {}
+  tenant_id = "${var.ARM_TENANT_ID}"
+}
+
+locals {
+  tags = {
+    environment = "${var.environment}"
+    project     = "${var.project}"
+  }
 }
 
 resource "azurerm_resource_group" "main" {
@@ -9,9 +17,10 @@ resource "azurerm_resource_group" "main" {
 
 resource "azurerm_virtual_network" "main" {
   name                = "${var.prefix}-network"
-  address_space       = ["10.0.0.0/22"]
+  address_space       = ["${var.address_space}"]
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
+  tags                = local.tags
 }
 
 resource "azurerm_subnet" "internal" {
@@ -31,6 +40,43 @@ resource "azurerm_network_interface" "main" {
     subnet_id                     = azurerm_subnet.internal.id
     private_ip_address_allocation = "Dynamic"
   }
+}
+
+resource "azurerm_network_security_group" "main" {
+  name                = "${var.prefix}-nsg"
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+  tags                = local.tags
+}
+
+# allow inbound traffic within VNET
+resource "azurerm_network_security_rule" "vnet" {
+  name                        = "AllowTrafficWithinVNET"
+  priority                    = 110
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "TCP"
+  source_port_range           = "*"
+  destination_port_range      = "*"
+  source_address_prefix       = "${var.address_space}"
+  destination_address_prefix  = "${var.address_space}"
+  resource_group_name         = azurerm_resource_group.main.name
+  network_security_group_name = azurerm_network_security_group.main.name
+}
+
+# block inbound traffic from internet
+resource "azurerm_network_security_rule" "blockinternet" {
+  name                        = "BlockAllInternet"
+  priority                    = 120
+  direction                   = "Inbound"
+  access                      = "Deny"
+  protocol                    = "*"
+  source_port_range           = "*"
+  destination_port_range      = "*"
+  source_address_prefix       = "*"
+  destination_address_prefix  = "*"
+  resource_group_name         = azurerm_resource_group.main.name
+  network_security_group_name = azurerm_network_security_group.main.name
 }
 
 resource "azurerm_linux_virtual_machine" "main" {
@@ -58,13 +104,13 @@ resource "azurerm_linux_virtual_machine" "main" {
   }
 }
 
-# resource "azurerm_public_ip" "example" {
-#   name                = "acceptanceTestPublicIp1"
-#   resource_group_name = azurerm_resource_group.example.name
-#   location            = azurerm_resource_group.example.location
-#   allocation_method   = "Static"
+resource "azurerm_public_ip" "example" {
+  name                = "acceptanceTestPublicIp1"
+  resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.example.location
+  allocation_method   = "Static"
 
-#   tags = {
-#     environment = "Production"
-#   }
-# }
+  tags = {
+    environment = "Production"
+  }
+}

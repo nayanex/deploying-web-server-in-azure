@@ -32,7 +32,7 @@ We used Packer to create a server image, and Terraform to create a template for 
 In general, we want to store the policy definition as a file, so that we get the advantages of version control and from there we'll want to run az policy definition command, which will deploy our policy definition. The following policy definition ensure that we can audit all Linux VMs with SSH password login enabled.
 
 ```bash
-az policy definition create --name LinuxPasswordPolicy --rules azurepolicy.rules.json --description "Ensures all indexed resources in the subscription have tags and deny deployment if they do not."  --display-name "Ensures indexed resources in the subscription have tags"
+az policy definition create --name LinuxPasswordPolicy --rules azurepolicy.rules.json --description "Ensures linux VMS are secured with password through SSH protocol"  --display-name "Ensures linux VMs are secured with ssh password"
 ```
 
 Once our policy definition is deployed, we are going to need to set up a policy assignment using the command:
@@ -52,7 +52,38 @@ az policy assignment create -h
 
 CONCLUSION: We created our policy locally, deployed it and applied it using the command line.
 
+## Create and Apply a Tagging Policy
 
+```bash
+# Ensures all indexed resources in the subscription have tags and deny deployment if they don't.
+az policy definition create --name "TaggingPolicyDefinition" \
+    --display-name "Ensures indexed resources in the subscription have tags" \
+    --description "Ensures all indexed resources in the subscription have tags and deny deployment if they don't."  \
+    --rules "tagging-policy.rules.json" \
+    --mode "Indexed"
+```
+
+```bash
+az policy assignment create --policy "TaggingPolicyDefinition" \
+    --display-name "Ensures indexed resources in the subscription have tags" \
+    --description "Ensures all indexed resources in the subscription have tags and deny deployment if they don't." \
+    --name "tagging-policy"
+
+# To verify that your policy has been correctly deployed and applied:
+az policy assignment list
+```
+
+### Delete a resource policy assignment
+
+[az polict assignment documentation](https://learn.microsoft.com/en-us/cli/azure/policy/assignment?view=azure-cli-latest)
+
+```bash
+az policy assignment delete --name "tagging-policy"
+
+az policy assignment delete --name
+                            [--resource-group]
+                            [--scope]
+```
 ## VIRTUAL NETWORKING
 
 The Azure documentation on [virtual networks](https://docs.microsoft.com/azure/virtual-network/manage-virtual-network?WT.mc_id=udacity_learn-wwl) is helpful, and also contains information on DNS, VNet peering, and more advanced virtual networking concepts.
@@ -265,7 +296,7 @@ Here, we create a Terraform configuration. To deploy our configuration, we run t
 ## Packer
 
 ```bash
-packer build demo.json
+packer build server.json
 
 # display all of our virtual machine images
 az image list 
@@ -295,3 +326,11 @@ Tenant Domain Name	| api://ee931dc3-e1ed-401f-b886-a8d83125124e	| From Applicati
 
 ![AAD-service-principal-expose-API](img/AAD-service-principal-expose-API.png)
 
+## Set Environment Variables
+
+```bash
+source set_azure_env.sh 
+# or 
+
+. set_azure_env.sh
+```

@@ -28,3 +28,8 @@ variable "address_space" {
   description = "VNet Address space"
   default     = "10.0.0.0/16"
 }
+
+variable "subnet_address" {
+  description = "Subnet address space"
+  default     = "10.0.0.0/24"
+}

@@ -27,7 +27,7 @@ resource "azurerm_subnet" "internal" {
   name                 = "internal"
   resource_group_name  = azurerm_resource_group.main.name
   virtual_network_name = azurerm_virtual_network.main.name
-  address_prefixes     = ["10.0.2.0/24"]
+  address_prefixes     = ["${var.subnet_address}"]
 }
 
 resource "azurerm_network_interface" "main" {
@@ -104,13 +104,11 @@ resource "azurerm_linux_virtual_machine" "main" {
   }
 }
 
-resource "azurerm_public_ip" "example" {
-  name                = "acceptanceTestPublicIp1"
+resource "azurerm_public_ip" "vmss" {
+  name                = "${var.prefix}-vmss-public-ip"
   resource_group_name = azurerm_resource_group.example.name
   location            = azurerm_resource_group.example.location
   allocation_method   = "Static"
-
-  tags = {
-    environment = "Production"
-  }
+  domain_name_label   = azurerm_resource_group.vmss.name
+  tags                = local.tags
 }

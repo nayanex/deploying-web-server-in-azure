@@ -1,6 +1,5 @@
 #!/bin/bash
 # run this script with source or .
-# ARM_CLIENT_SECRET (service principal password) cannot be retrieved after creation but can be reset, see https://stackoverflow.com/a/62971780/4458566
 
 echo "Setting environment variables for Terraform"
 export ARM_SUBSCRIPTION_ID="bb272072-9c6d-4e28-b814-947814c3e6ef"

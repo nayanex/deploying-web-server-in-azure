@@ -1,6 +1,6 @@
 provider "azurerm" {
   features {}
-  tenant_id = "${var.ARM_TENANT_ID}"
+  tenant_id = var.ARM_TENANT_ID
 }
 
 locals {
@@ -58,8 +58,8 @@ resource "azurerm_network_security_rule" "vnet" {
   protocol                    = "TCP"
   source_port_range           = "*"
   destination_port_range      = "*"
-  source_address_prefix       = "${var.address_space}"
-  destination_address_prefix  = "${var.address_space}"
+  source_address_prefix       = var.address_space
+  destination_address_prefix  = var.address_space
   resource_group_name         = azurerm_resource_group.main.name
   network_security_group_name = azurerm_network_security_group.main.name
 }
@@ -111,4 +111,26 @@ resource "azurerm_public_ip" "vmss" {
   allocation_method   = "Static"
   domain_name_label   = azurerm_resource_group.vmss.name
   tags                = local.tags
+}
+
+resource "azurerm_lb_backend_address_pool" "main" {
+  loadbalancer_id = azurerm_lb.main.id
+  name            = "${var.prefix}-backendpool"
+}
+
+resource "azurerm_lb_probe" "main" {
+  loadbalancer_id = azurerm_lb.main.id
+  name            = "${var.prefix}-lbhealth"
+  port            = 80
+}
+
+resource "azurerm_lb_rule" "main" {
+  loadbalancer_id                = azurerm_lb.main.id
+  name                           = "${var.prefix}-lbrule"
+  protocol                       = "Tcp"
+  frontend_port                  = 80
+  backend_port                   = 80
+  frontend_ip_configuration_name = "${var.prefix}-lbfrontend"
+  backend_address_pool_ids       = [azurerm_lb_backend_address_pool.main.id]
+  probe_id                       = azurerm_lb_probe.main.id
 }

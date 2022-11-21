@@ -10,6 +10,11 @@ locals {
   }
 }
 
+data "azurerm_image" "packer-image" {
+  name                = var.image
+  resource_group_name = azurerm_resource_group.main.name
+}
+
 resource "azurerm_resource_group" "main" {
   name     = "${var.prefix}-resources"
   location = var.location
@@ -80,13 +85,17 @@ resource "azurerm_network_security_rule" "blockinternet" {
 }
 
 resource "azurerm_linux_virtual_machine" "main" {
+  count                           = var.number_of_vms
   name                            = "${var.prefix}-vm"
   resource_group_name             = azurerm_resource_group.main.name
   location                        = azurerm_resource_group.main.location
-  size                            = "Standard_D2s_v3"
+  size                            = "Standard_B1s"
   admin_username                  = var.username
   admin_password                  = var.password
   disable_password_authentication = false
+  tags                            = local.tags
+  source_image_id                 = data.azurerm_image.packer-image.id
+  availability_set_id             = azurerm_availability_set.main.id
   network_interface_ids = [
     azurerm_network_interface.main.id,
   ]
@@ -99,9 +108,30 @@ resource "azurerm_linux_virtual_machine" "main" {
   }
 
   os_disk {
+    name                 = "${var.prefix}-osdisk-${count.index}"
     storage_account_type = "Standard_LRS"
     caching              = "ReadWrite"
   }
+}
+
+resource "azurerm_managed_disk" "main" {
+  count                = var.number_of_vms
+  name                 = "${var.prefix}-datadisk-${count.index}"
+  location             = azurerm_resource_group.main.location
+  resource_group_name  = azurerm_resource_group.main.name
+  storage_account_type = "Standard_LRS"
+  create_option        = "Empty"
+  disk_size_gb         = 10
+  tags                 = local.tags
+}
+
+resource "azurerm_availability_set" "main" {
+  name                         = "${var.prefix}-avset"
+  location                     = azurerm_resource_group.main.location
+  resource_group_name          = azurerm_resource_group.main.name
+  platform_fault_domain_count  = 2
+  platform_update_domain_count = 5
+  tags                         = local.tags
 }
 
 resource "azurerm_public_ip" "vmss" {
@@ -111,6 +141,19 @@ resource "azurerm_public_ip" "vmss" {
   allocation_method   = "Static"
   domain_name_label   = azurerm_resource_group.vmss.name
   tags                = local.tags
+}
+
+resource "azurerm_lb" "main" {
+  name                = "${var.prefix}-lb"
+  location            = var.location
+  resource_group_name = azurerm_resource_group.main.name
+  sku                 = "Standard"
+  tags                = local.tags
+
+  frontend_ip_configuration {
+    name                 = "${var.prefix}-lbfrontend"
+    public_ip_address_id = azurerm_public_ip.main.id
+  }
 }
 
 resource "azurerm_lb_backend_address_pool" "main" {

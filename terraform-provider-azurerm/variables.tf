@@ -4,12 +4,12 @@ variable "prefix" {
 
 variable "environment" {
   description = "Project Environment (dev/test/prod)"
-  default = "dev"
+  default     = "dev"
 }
 
 variable "project" {
   description = "Project Name"
-  default = "azure-web-server"
+  default     = "azure-web-server"
 }
 
 variable "location" {
@@ -32,4 +32,15 @@ variable "address_space" {
 variable "subnet_address" {
   description = "Subnet address space"
   default     = "10.0.0.0/24"
+}
+
+variable "number_of_vms" {
+  description = "Number of VMs to provision"
+  type        = number
+  default     = 3
+}
+
+variable "image" {
+  description = "Packer Generated Image Name"
+  default     = "packer-image"
 }

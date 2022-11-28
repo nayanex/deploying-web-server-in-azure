@@ -1,6 +1,5 @@
 provider "azurerm" {
   features {}
-  tenant_id = var.ARM_TENANT_ID
 }
 
 locals {
@@ -134,7 +133,7 @@ resource "azurerm_availability_set" "main" {
   tags                         = local.tags
 }
 
-resource "azurerm_public_ip" "vmss" {
+resource "azurerm_public_ip" "main" {
   name                = "${var.prefix}-vmss-public-ip"
   resource_group_name = azurerm_resource_group.example.name
   location            = azurerm_resource_group.example.location

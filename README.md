@@ -22,6 +22,7 @@ For this project, you will write a Packer template and a Terraform template to d
 ### Instructions
 
 - Run `packer build`  on your Packer template with any appropriate variable arguments
+- Run `terraform init` 
 - Run `terraform plan -out solution.plan`
 - Deploy your Terraform infrastructure – don't forget to `terraform destroy` when done
 
@@ -280,6 +281,8 @@ Using identity as your perimeter is a critical concept in cloud security. We sho
 ### Deploying Resources with Terraform
 
 Here, we create a Terraform configuration. To deploy our configuration, we run the following commands:
+
+`terraform init`
 
 `terraform plan -out <filename>`
 

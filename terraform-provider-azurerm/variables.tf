@@ -1,5 +1,6 @@
 variable "prefix" {
   description = "The prefix which should be used for all resources in this example"
+  default     = "udacity"
 }
 
 variable "environment" {
@@ -14,14 +15,17 @@ variable "project" {
 
 variable "location" {
   description = "The Azure Region in which all resources in this example should be created."
+  default     = "westeurope"
 }
 
-variable "username" {
+variable "admin_username" {
   description = "VM username."
+  default     = "adminuser"
 }
 
-variable "password" {
-  description = "VM password."
+variable "admin_password" {
+  description = "The admin password for the VMs"
+  default = ""
 }
 
 variable "address_space" {
@@ -43,4 +47,9 @@ variable "number_of_vms" {
 variable "image" {
   description = "Packer Generated Image Name"
   default     = "packer-image"
+}
+
+variable "packer_resource_group" {
+  description = "Resource group of the Packer image"
+  default     = "packer-rg"
 }

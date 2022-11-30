@@ -24,6 +24,7 @@ For this project, you will write a Packer template and a Terraform template to d
 - Run `packer build`  on your Packer template with any appropriate variable arguments
 - Run `terraform init` 
 - Run `terraform plan -out solution.plan`
+- Run `terraform apply "solution.plan"` or `terraform apply`
 - Deploy your Terraform infrastructure – don't forget to `terraform destroy` when done
 
 ### Output
@@ -286,7 +287,7 @@ Here, we create a Terraform configuration. To deploy our configuration, we run t
 
 `terraform plan -out <filename>`
 
-`terraform apply`
+`terraform apply` => Deploy your terraform infrastructure
 
 `terraform show` =>  to see your new infrastructure!
 
@@ -306,10 +307,12 @@ az image list
 
 # Remember, Packer does not maintain state, so you can't actually delete your Packer image using Packer
 # So, for that you'll need to use Azure CLI command:
-az image delete -g packer-rg -n myPackerImage
+az image delete -g packer-rg -n packer-image
 
 az image list
 ```
+
+**OBS:** *Please create a resource groupe named* `packer-rg` before doing the steps above.
 
 ## AAD Service Principal Information
 

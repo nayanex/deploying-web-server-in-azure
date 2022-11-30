@@ -3,3 +3,5 @@
 
 terraform-provider-azurerm/.terraform/
 terraform-provider-azurerm/
+
+solution.plan
